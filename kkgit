@@ -9,13 +9,13 @@ ERR_COL="\e[37;41m"
 RESET_COL="\033[0m\e[0m"
 
 confirm () {
-    read -r -p "${1:-Wanna Update? [y/N]} " choose
+    read -r -p "${1:-Wanna Update? [Y/n]} " choose
     case $choose in
-        [yY][eE][sS]|[yY])
-            true
+        [Nn])
+            false
             ;;
         *)
-            false
+            true
             ;;
     esac
 }
@@ -39,7 +39,7 @@ function gitpath {
 
 
 RESP=0
-confirm "Auto confirm? [y/N]" && RESP=1
+confirm "Auto confirm? [Y/n]" && RESP=1
 
 for i in `find . -name '.git'`
 do
@@ -52,7 +52,7 @@ do
     if [ $RESP -eq 1 ]; then
         git $*
     else
-        confirm "Execute? [y/N]" && git $*
+        confirm "Execute? [Y/n]" && git $*
     fi
 
     cd - > /dev/null
