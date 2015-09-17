@@ -1,0 +1,14 @@
+#!/bin/bash
+
+count=`find . -name *.pyc | wc -l`
+if [ $count -gt 0 ]; then
+    find . -name "*.pyc" -delete
+    echo "$count *.pyc deleted!"
+fi
+
+count=`find . -name migrations | wc -l`
+if [ $count -gt 0 ]; then
+    echo "$count migrations found!"
+    echo "Choose [y/n] for each one to delete:"
+    find . -name "migrations" -exec echo -n "    " \; -ok rm -rf {} \;
+fi
