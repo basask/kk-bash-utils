@@ -1,14 +1,38 @@
 #!/bin/bash
 
+CL_ERR="\e[31m"
+CL_OK="\e[32m"
+CL_RESET="\033[0m\e[0m"
+FMT_BOLD=$(tput bold)
+FMT_RESET=$(tput sgr0)
+
+confirm () {
+    read -r -p "${1:-Delete all files? [Y/n]} " choose
+    case $choose in
+        [Nn])
+            false
+            ;;
+        *)
+            true
+            ;;
+    esac
+}
+
 count=`find . -name *.pyc | wc -l`
 if [ $count -gt 0 ]; then
     find . -name "*.pyc" -delete
-    echo "$count *.pyc deleted!"
+    echo -e "${CL_OK}$count${CL_RESET}${FMT_BOLD} *.pyc deleted!${FMT_RESET}"
+else
+    echo -e "${FMT_BOLD}No ${CL_OK}*.pyc${CL_RESET}${FMT_BOLD} files found.${FMT_RESET}"
 fi
 
-count=`find . -name migrations | wc -l`
-if [ $count -gt 0 ]; then
-    echo "$count migrations found!"
-    echo "Choose [y/n] for each one to delete:"
-    find . -name "migrations" -exec echo -n "    " \; -ok rm -rf {} \;
+migrations=`find . -name migrations`
+if [ -n "$migrations" ]; then
+    echo -e "${FMT_BOLD}The following dirs will be deleted:${FMT_RESET}"
+    for mig in $migrations; do
+        echo -e "\t$CL_ERR$mig$CL_RESET"
+    done
+    confirm "Delete all files? [Y/n]" && find . -name migrations -prune -exec rm -rf {} \;
+else
+    echo -e "${FMT_BOLD}No ${CL_OK}migrations${CL_RESET}${FMT_BOLD} files found.${FMT_RESET}"
 fi
