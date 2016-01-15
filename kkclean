@@ -26,13 +26,13 @@ else
     echo -e "${FMT_BOLD}No ${CL_OK}*.pyc${CL_RESET}${FMT_BOLD} files found.${FMT_RESET}"
 fi
 
-migrations=`find . -name migrations`
+migrations=`find . -name migrations -not -path "*/.git/*"`
 if [ -n "$migrations" ]; then
     echo -e "${FMT_BOLD}The following dirs will be deleted:${FMT_RESET}"
     for mig in $migrations; do
         echo -e "\t$CL_ERR$mig$CL_RESET"
     done
-    confirm "Delete all files? [Y/n]" && find . -name migrations -prune -exec rm -rf {} \;
+    confirm "Delete all files? [Y/n]" && find . -name migrations -not -path "*/.git/*" -prune -exec rm -rf {} \;
 else
     echo -e "${FMT_BOLD}No ${CL_OK}migrations${CL_RESET}${FMT_BOLD} files found.${FMT_RESET}"
 fi
