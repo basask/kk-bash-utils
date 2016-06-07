@@ -41,7 +41,7 @@ function gitpath {
 RESP=0
 confirm "Auto confirm? [Y/n]" && RESP=1
 
-for i in `find . -name '.git'`
+for i in `find . -maxdepth 2 -name '.git'`
 do
     DIR=$(dirname "${i}")
 
