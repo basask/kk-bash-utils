@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Find .RAW files that does not has its .JPG counterpart and delests it
+
+
+rawfiles=`find . -name "*.CR2"`
+
+for rawfilepath in $rawfiles 
+do
+	filename=${rawfilepath%.*}
+	filepath="$filename.JPG"
+	if ! [ -f $filepath ]; then
+		rm $rawfilepath
+	fi
+done
